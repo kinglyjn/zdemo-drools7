@@ -1,0 +1,71 @@
+//created on: 2018-7-19
+package rules.test02
+import test02.rules.Customer
+import test02.rules.Car
+
+/**
+* 测试 继承
+*
+*/
+rule "test02-extends-01"
+	agenda-group "test02-extends"
+	when
+		$customer: Customer( age>60 )
+	then
+		modify( $customer ) {
+			setDiscount(0.1f);
+		}
+		System.out.println("rule#test02-extends-01: Fired, and customer=" + $customer);
+end
+
+rule "test02-extends-02"
+	extends "test02-extends-01"
+	agenda-group "test02-extends"
+	when 
+		$car: Car( owner==$customer )
+	then
+		modify( $car ) {
+			setFreeParking(true)
+		}
+		System.out.println("rule#test02-extends-02: Fired, and car=" + $car);
+end
+
+
+
+/**
+* 测试 do标记代码
+*
+*/
+rule "test02-do-mark-01"
+	agenda-group "test02-do-mark"
+	when
+		$customer: Customer( age>60 )
+		if ( type=="Golden" ) do[giveDiscount10]
+		else if ( type=="Silver" ) break[giveDiscount5] //满足此条件后执行giveDiscount5标记代码，然后终止规则的匹配执行
+		$car: Car( owner==$customer )
+	then
+		modify( $car ) { 
+			setFreeParking(true) 
+		};
+		System.out.println("rule#test02-do-mark-01: Fired, and car=" + $car);
+	then[giveDiscount10]
+		modify( $customer ){
+        	setDiscount(0.1f)
+    	};
+    	System.out.println("markCode#giveDiscount10: executed, and customer=" + $customer);
+    then[giveDiscount5]
+		modify( $customer ){
+        	setDiscount(0.05f)
+    	};
+    	System.out.println("markCode#giveDiscount5: executed, and customer=" + $customer);
+end
+
+
+
+
+
+
+
+
+
+

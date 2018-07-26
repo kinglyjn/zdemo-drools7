@@ -1,0 +1,19 @@
+//created on: 2018-7-19
+package rules.test02
+import test02.rules.Account
+
+
+/**
+* 测试 自动获取焦点
+*
+*/
+rule "test02-auto-focus"
+	agenda-group "test02-auto-focus-group"
+	auto-focus true
+	when
+		//
+	then
+		System.out.println("rule#test02-auto-focus: Fired!");
+end
+
+

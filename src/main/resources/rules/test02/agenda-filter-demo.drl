@@ -1,0 +1,23 @@
+//created on: 2018-7-19
+package rules.test02
+
+
+/*
+* agenda filter 测试
+*
+*/
+rule "test02-agenda-filter-01"
+	agenda-group "test02-agenda-filter"
+	when
+	then
+		System.out.println("rule#test02-agenda-filter-01: Fired!");
+end
+
+rule "test02-agenda-filter-02"
+	agenda-group "test02-agenda-filter"
+	when
+	then
+		System.out.println("rule#test02-agenda-filter-02: Fired!");
+end
+
+

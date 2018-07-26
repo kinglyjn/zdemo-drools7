@@ -1,0 +1,64 @@
+1. 安装GEF
+
+	GEF是Eclipse的图形编辑框架，用于图形查看组件的插件。 
+	如果你没有安装GEF，可以通过内置的更新机制（或者从Eclipse.org下载GEF，不建议使用）。
+	JBoss IDE 已经内置GEF，像其他Eclipse分支一样，这一步对很多人来说可能是多余的。 
+	打开Help->Software updates…->Available Software->Add Site…。地址为：
+	http://download.eclipse.org/tools/gef/updates/releases/
+	
+
+2. 使用zip文件安装drools 
+
+	从下面的链接下载Drools Eclipse IDE插件，解压下载文件到Eclipse的主目录（不仅仅是
+	复制文件，将feature和plugin目录下的jar包复制到Eclipse对应的目录），重启Eclipse。 
+	下载地址：http://www.drools.org/download/download.html 
+	检查是否安装成功，尝试打开Drools视图：点击Eclipse窗口右上角的“Open Perspective”
+	按钮，选择“Other…”，选择Drools视图。如果未找到Drools视图，很可能是因为没有安装成
+	功。检查一下你是否正确执行每一个步骤：Eclipse（3.4.x）的版本是否正确？插件是否正确
+	提取（检查org.drools.eclipse_*.jar存在Eclipse根目录的plugin目录下）？如果你无
+	法找到问题原因，请联系我们（比如，irc或邮件），更多的信息可以在官网查找：
+	http://www.drools.org/
+	
+
+3. Drools 运行时
+	
+	Drools运行时是文件系统上的Jar包集合，它代表一个特定版本的jar Drools项目。创建一个运
+	行时，需要通过IDE指定选择发布的版本。如果你想创建一个新的运行时，它基于包含在插件自身中
+	的最新Drools项目JAR包，你也可以轻易的做到。必须为Eclipse工作空间指定一个Drools运行
+	时，但是个人项目可以覆盖默认的，并且明确的为项目选择适当的运行时。
+	
+	定义一个Drools运行时:
+	你必须在Eclipse的preferences视图中创建一个或多个Drools运行时。开点Eclipse的window
+	菜单，选择preferences栏目，弹出Preferences对话框，这里可以设置你的配置项。对话框左侧，
+	Drools分类下面，选择“Installed Drools runtimes”。右边面板会显示当前定义的Drools运
+	行时。
+	一般情况，可以有两个选择： 
+	1. 如果你只是想使用Drools Eclipse插件默认引入的jar包，你可以创建一个Drools运行时通
+	过点击“Create a new Drools 5 runtime …”按钮。弹出浏览窗口，询问选择运行时环境运行
+	的本地系统目录。插件会自动的把所有需要的依赖复制到指定的文件夹。
+	2. 如果你想使用一个指定版本的Drools项目，你需要创建一个文件夹，将所有的Drools lib和
+	依赖放在此文件夹。与上面操作不同，设置一个运行时名称，选择包含所有jar的文件夹。 
+	
+	
+4. 
+	每个Maven artifact的源码都可以通过Jboss Maven资源库中的源码jar包获得。同样的jar包
+	也可以从下载的zip文件中获得。但是，如果你希望从源码进行构建，强烈建议从我们的源码管理中
+	获得源码。 
+	Drools和jBPM使用Git来版本管理。Git资源库托管于GitHub：https://github.com/droolsjbpm 
+	Git允许你fork我们的代码，在上面个人独立的进行修改，但仍需要定期的合并我们最新的修改和选择性
+	的分享你的代码给我们。如果想学习更多git知识，可以读一读免费书籍《Git Pro》。
+	
+	构建源码:
+	其实，从源码构建非常简单，比如你想构建guvnor项目：
+	$ git clone git@github.com:droolsjbpm/guvnor.git
+	...
+	$ cd guvnor
+	$ mvn clean install -DskipTests -Dfull
+	...
+	
+	然而，业务有很多潜在的误区，所以如果你真的想从源代码构建项目，并对项目作出贡献，
+	按照droolsjbpm-build-bootstrap中ReadMe文件中的说明来做。 
+	地址：https://github.com/droolsjbpm/droolsjbpm-build-bootstrap/blob/master/README.md
+	
+	
+	

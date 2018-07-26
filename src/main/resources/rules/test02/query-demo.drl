@@ -1,0 +1,28 @@
+//created on: 2018-7-20
+package rules.test02
+import test02.rules.Account
+
+rule "test02-query-rule-01"
+	agenda-group "test02-query"
+    when
+    	$account: Account()
+    then	
+		System.out.println("rule#test02-query-rule-01: Fired, and account=" + $account);
+end
+
+
+/**
+* 测试 无参查询
+*
+*/
+query "query-account-with-balance-equals-100"
+	$account: Account( balance==100 )
+end
+
+/**
+* 测试 有参查询
+*
+*/
+query "query-account-by-balance-greater-than"(Integer arg_balance)
+	$account: Account( balance>arg_balance )
+end

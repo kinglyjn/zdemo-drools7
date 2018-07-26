@@ -1,0 +1,75 @@
+//created on: 2018-7-19
+package rules.test02
+import test02.rules.Account
+
+/**
+* 测试 RHS update 操作
+*
+*/
+rule "test02-update-01"
+	agenda-group "test02-update"
+	when
+		$account:Account( balance==100 )
+	then
+		System.out.println( "rule#test02-update-01: Fired, and account=" + $account);
+		$account.setBalance( 200 );
+		update( $account );
+end
+
+rule "test02-update-02"
+	agenda-group "test02-update"
+	when
+		$account:Account( balance==200 )
+	then
+		System.out.println( "rule#test02-update-02: Fired, and account=" + $account );
+end
+
+
+
+/**
+* 测试 KieSeesion API update 操作
+*
+*/
+rule "test02-update-03"
+	agenda-group "test02-kiesession-update"
+	//auto-focus true
+	when
+		$account:Account( balance==100 )
+	then
+		System.out.println( "rule#test02-update-03: Fired, and account=" + $account);
+end
+
+rule "test02-update-04"
+	agenda-group "test02-kiesession-update"
+	//auto-focus true
+	when
+		$account:Account( balance==200 )
+	then
+		System.out.println( "rule#test02-update-04: Fired, and account=" + $account );
+end
+
+
+
+/**
+* 测试 RHS modify 操作
+*
+*/
+rule "test02-modify-01"
+	agenda-group "test02-modify"
+	when
+		$account:Account( balance==100 )
+	then
+		System.out.println( "rule#test02-modify-01: Fired, and account=" + $account);
+		modify( $account ) {
+			setBalance(200);
+		}
+end
+
+rule "test02-modify-02"
+	agenda-group "test02-modify"
+	when
+		$account:Account( balance==200 )
+	then
+		System.out.println( "rule#test02-modify-02: Fired, and account=" + $account );
+end
+

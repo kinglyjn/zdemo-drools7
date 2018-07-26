@@ -1,0 +1,64 @@
+//created on: 2018-7-20
+package rules.test02
+import java.util.Date
+
+rule "test02-declare-class-in-drl-01"
+	agenda-group "test02-declare-class-in-drl"
+	no-loop true
+	when
+		eval( true )
+	then
+		Address address = new Address();
+		address.setCountryName("China");
+		address.setCity(City.BIEJING);
+		address.setStreet("Chengfu");
+		address.setTime(new Date());
+		System.out.println("rule#test02-declare-class-in-drl-01: Fired, and address.city.name=" + address.getCity().getName());
+		
+		insert(address);
+end
+
+
+rule "test02-declare-class-in-drl-02"
+	agenda-group "test02-declare-class-in-drl"
+	when
+		$address: Address(city==City.GUANGZHOU)
+	then
+		System.out.println("rule#test02-declare-class-in-drl-02 fired, and address=" + $address);
+end
+
+
+
+/**
+* 声明Address类
+* 全类名 ${package_name}.Address，此处为 rules.test02.Address
+*
+*/
+declare Country
+	countryName: String
+end
+
+declare Address extends Country //该类型不光含有无参构造方法，也使用@key定义了Address(street,city)有参构造方法
+	city: City @key
+	street: String @key
+	time: Date
+end
+
+
+/**
+* 声明一个枚举(相对常用)
+*
+*/
+declare enum City
+	BIEJING("beijing",1000), SHANGHAI("shanghai",2000), GUANGZHOU("guangzhou", 3000);
+	name: String
+	num: int
+end
+
+/**
+* 定义查询
+*
+*/
+query "getAddress"
+	$address:Address()
+end

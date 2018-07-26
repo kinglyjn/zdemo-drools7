@@ -1,0 +1,24 @@
+//created on: 2018-7-20
+package rules.test02
+
+rule "test02-function-rule-01"
+	agenda-group "test02-function"
+	when
+		eval( true )
+	then
+		// execute some functions
+		sayHello();
+		
+		Integer sumResult = sum(1,2);
+		System.out.println("function#sum: executed, and result=" + sumResult);
+end
+
+
+function void sayHello() {
+	System.out.println("function#sayHello: executed!");
+}
+
+function Integer sum(Integer x, Integer y) {
+	return x+y;
+}
+

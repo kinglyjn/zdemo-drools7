@@ -1,0 +1,73 @@
+//created on: 2018-7-19
+package rules.test02
+import test02.rules.Account
+
+/*
+* 测试 no-loop属性
+*
+*/
+rule "test02-loop"
+	ruleflow-group "test02-loop"
+	no-loop false //默认为false（循环执行）
+   
+    when
+        $account: Account( balance < 100 )
+    
+    then
+        $account.setBalance( $account.getBalance()+1 );
+        System.out.println("rule#test02-loop: " + $account);
+        update( $account );
+end
+
+rule "test02-noloop"
+	ruleflow-group "test02-noloop"
+	no-loop true //非循环执行 |或者使用其增强版lock-on-active=true属性来避免其他规则更新Fact之后对该规则的执行造成影响
+   	
+    when
+        $account: Account( balance < 100 )
+    
+    then
+        $account.setBalance( $account.getBalance()+1 );
+        System.out.println("rule#test02-noloop: " + $account);
+        update( $account );
+end
+
+
+rule "test02-other-rule"
+	when
+		$account: Account( balance < 100 )
+	then
+		 System.out.println("rule#test02-other-rule: Fired!");
+end
+
+
+
+/*
+* 测试 lock-on-active属性
+* 该属性默认为false
+*
+*/
+rule "test02-lock-on-active-01"
+	agenda-group "test02-lock-on-active"
+	when
+		$account: Account( balance < 100 )
+	then
+		System.out.println("rule#test02-lock-on-active-01: Fired!");
+		$account.setBalance( 101 );
+		update( $account );
+end
+
+rule "test02-lock-on-active-02"
+	agenda-group "test02-lock-on-active"
+	lock-on-active true
+	when
+		$account: Account( balance > 100 )
+	then
+		System.out.println("rule#test02-lock-on-active-02: Fired!");
+end
+
+
+
+
+
+

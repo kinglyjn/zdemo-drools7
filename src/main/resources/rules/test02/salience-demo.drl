@@ -1,0 +1,44 @@
+//created on: 2018-7-19
+package rules.test02
+import test02.rules.Account
+
+/**
+* 测试 静态优先级
+* 优先级越大，越早执行
+*
+*/
+rule "test02-static-salience-01"
+	agenda-group "test02-salience"
+	salience 1
+    when
+    	//eval(true)等价于什么都不写
+    	eval( true )
+    then
+        System.out.println("rule#test02-static-salience-01: Fired!");
+end
+
+rule "test02-static-salience-02"
+	agenda-group "test02-salience"
+	salience 2
+    when
+        //conditions
+    then
+        System.out.println("rule#test02-static-salience-02: Fired!");
+end
+
+
+/**
+* 测试 动态优先级
+* 通过 Fact对象的注入，动态设置规则执行的优先级
+*
+*/
+rule "test02-dynamic-salience"
+	agenda-group "test02-salience"
+	salience sal
+	when
+		$account: Account( sal:balance < 100)
+	then
+		System.out.println("rule#test02-dynamic-salience: account=" + $account + ", salence=" + sal);
+end
+
+

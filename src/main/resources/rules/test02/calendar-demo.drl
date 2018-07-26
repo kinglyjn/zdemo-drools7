@@ -1,0 +1,14 @@
+//created on: 2018-7-19
+package rules.test02
+
+
+rule "test02-calendar-01"
+	agenda-group "test02-calendar"
+	calendars "weekday"
+	
+    when
+        //conditions
+    then
+		System.out.println("rule#test02-calendar: Fired!");
+end
+

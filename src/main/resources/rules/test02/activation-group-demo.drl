@@ -1,0 +1,27 @@
+//created on: 2018-7-19
+package rules.test02
+import test02.rules.Account
+
+/**
+* 测试 activation-group
+*
+*/
+rule "test02-activation-group-01"
+	agenda-group "test02-activation-group-demo"
+	activation-group "activation-groupxx"
+	salience 1
+    when
+    	//conditions
+    then
+        System.out.println("rule#test02-activation-group-01: Fired!");
+end
+
+rule "test02-activation-group-02"
+	agenda-group "test02-activation-group-demo"
+	activation-group "activation-groupxx"
+	salience 2
+    when
+        //conditions
+    then
+        System.out.println("rule#test02-activation-group-02: Fired!");
+end

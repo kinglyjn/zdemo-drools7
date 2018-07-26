@@ -1,0 +1,85 @@
+1. Define system properties
+
+    create setenv.sh (or setenv.bat) file inside TOMCAT_HOME/bin and add following:
+
+    CATALINA_OPTS="-Xmx512M \
+    -Djava.security.auth.login.config=$CATALINA_HOME/webapps/kie-drools-wb/WEB-INF/classes/login.config \
+    -Dorg.jboss.logging.provider=jdk"
+
+    NOTE: On Debian based systems $CATALINA_HOME needs to be replaced with $CATALINA_BASE. ($CATALINA_HOME defaults to /usr/share/tomcat8 and $CATALINA_BASE defaults to /var/lib/tomcat8/)
+    NOTE: this is an example for unix like systems for Windows $CATALINA_HOME needs to be replaced with windows env variable or absolute path
+    NOTE: java.security.auth.login.config value includes name of the folder in which application is deployed by default it assumes kie-drools-wb so ensure that matches real installation.
+    login.config file can be externalized as well meaning be placed outside of war file.
+
+
+   *******************************************************************************
+
+2. Configure JEE security for kie-wb on tomcat (with default realm backed by tomcat-users.xml)
+
+   2a. Copy "kie-tomcat-integration" JAR into TOMCAT_HOME/lib (org.kie:kie-tomcat-integration)
+   2b. Copy "JACC" JAR into TOMCAT_HOME/lib (javax.security.jacc:artifactId=javax.security.jacc-api in JBoss Maven Repository)
+   2c. Copy "slf4j-api" JAR into TOMCAT_HOME/lib (org.slf4j:artifactId=slf4j-api in JBoss Maven Repository)
+   2d. Add valve configuration into TOMCAT_HOME/conf/server.xml inside Host element as last valve definition:
+
+      <Valve className="org.kie.integration.tomcat.JACCValve" />
+
+   2e. Edit TOMCAT_HOME/conf/tomcat-users.xml to include roles and users, make sure there will be 'analyst' or 'admin' roles defined as it's required to be authorized to use kie-wb
+   
+   
+   
+   
+中文说明：
+
+ 	选择对应你应用server的war包，不同应用之间的差别只是表面的，比如有排除一些应用程序已经包含的jar包等。
+	eap6_4：为Red Hat JBoss Enterprise Application Platform 6.4定制；
+	tomcat7：为Apache Tomcat7定制； 
+	批注：tomcat7需要额外的配置来确保Workbench的正确安装。参考war包中最新的readme.md文件。
+	was8: 为IBM WebSphere Application Server 8定制；
+	weblogic12:为Oracle WebLogic Server 12c定制； 
+	批注：WebLogic需要额外的配置来确保Workbench的正确安装。参考war包中最新的readme.md文件。
+	wildfly8: 为Red Hat JBoss Wildfly 8定制  
+   
+	Workbench 数据：
+	Workbench默认存储数据在$WORKING_DIRECTORY/.niogit，比如wildfly-8.0.0.Final/bin/.niogit，
+	可以用个系统变量-Dorg.uberfire.nio.git.dir来改变位置。 
+	批注：在生成环境中，注意备份Workbench数据存储目录。
+	
+	系统属性：
+	org.uberfire.nio.git.dir：.niogit本地目录，默认：工作空间目录。
+	org.uberfire.nio.git.daemon.enabled：启用/停用 git守护进程。默认：true。
+	org.uberfire.nio.git.daemon.host:如果git守护进程为enabled，使用此配置项作为本地地址。默认：localhost。
+	org.uberfire.nio.git.daemon.port:如果git守护进程为enabled，使用此配置项作为端口。默认：9418。
+	org.uberfire.nio.git.ssh.enabled: 启用/停用 ssh守护进程。默认：true。
+	org.uberfire.nio.git.ssh.host: 如果ssh守护进程为enabled，使用此配置项作为本地地址。默认：localhost。
+	org.uberfire.nio.git.ssh.port: 如果ssh守护进程为enabled，使用此配置项作为端口。默认：8001。
+	org.uberfire.nio.git.ssh.cert.dir:目录.security的本地路径，存储本地证书。默认：工作目录。
+	org.uberfire.nio.git.ssh.passphrase:访问操作系统的公共keystore密码，当使用scp url方式克隆git资源库时。比如：git@github.com:user/repository.git。
+	org.uberfire.metadata.index.dir: Lucene 的.index文件夹存储目录。默认：工作目录。
+	org.uberfire.cluster.id: helix cluster名称，比如：kie-cluster
+	org.uberfire.cluster.zk:连接zookeeper字符串，按照host1:port1,host2:port2,host3:port3格式编写。比如：localhost:2188。
+	org.uberfire.cluster.local.id: helix cluster节点的唯一Id。注意用用“_”替换“:”，比如：node1_12345。
+	org.uberfire.cluster.vfs.lock: helix cluster上的资源名称定义。比如：kie-vfs。
+	org.uberfire.cluster.autostart:当应用完全初始化，所有集群成员都创建本地克隆之后进行VFS集群。默认：false。
+	org.uberfire.sys.repo.monitor.disabled:禁止配置文件监听（除非你清楚你在做什么，否则不要禁止）。默认：false。
+	org.uberfire.secure.key:密码加密所使用的密码。默认：org.uberfire.admin。
+	org.uberfire.secure.alg:密码加密算法。默认：PBEWithMD5AndDES。
+	org.uberfire.domain: uberfire使用的安全domain名称。默认：ApplicationRealm。
+	org.guvnor.m2repo.dir: Maven repository文件存储位置。默认：working-directory/repositories/kie。
+	org.guvnor.project.gav.check.disabled:禁止GAV检查。默认：false。
+	org.kie.example.repositories: demo repositories克隆文件夹。demo repositories需要获得和占用此文件夹。Demo repositories可以从kie-wb-6.2.0-SNAPSHOT-example-repositories.zip artifact获得。优先级高于org.kie.demo和org.kie.example。默认：不使用。
+	org.kie.demo:启用从github外部克隆一个应用。优先级高于org.kie.example。默认：true。
+	org.kie.example:启用example通过Repository，Organization Unit和Project构造。默认：false。
+	org.kie.build.disable-project-explorer:禁止自动构建项目管理中选中的项目。默认：false。
+	
+	在WildFly或JBoss EAP集群修改这些属性中之一：
+	修改$JBOSS_HOME/domain/configuration/host.xml.
+	找到xml元素中属于main-server-group的server元素，添加一个系统属性，比如：
+	
+	<system-properties>
+	    <property name="org.uberfire.nio.git.dir" value="..." boot-time="false"/>
+	      ...
+	</system-properties>
+	
+	
+	
+   

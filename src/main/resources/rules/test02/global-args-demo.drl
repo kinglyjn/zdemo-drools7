@@ -1,0 +1,29 @@
+//created on: 2018-7-20
+package rules.test02
+import test02.rules.SendEmailService
+
+
+global SendEmailService emailService
+global SendEmailService emailService2
+
+rule "test02-global-01"
+	agenda-group "test02-global-01"
+	when
+		eval( true )
+	then
+		// execute some functions
+		System.out.println("rule#test02-global-01: Fired!");
+		emailService.send("[INFO] rule#test02-global-01 fired!");
+end
+
+rule "test02-global-02"
+	agenda-group "test02-global-02"
+	when
+		eval( true )
+	then
+		// execute some functions
+		System.out.println("rule#test02-global-01: Fired!");
+		emailService2.send2("[INFO] rule#test02-global-01 fired!");
+end
+
+

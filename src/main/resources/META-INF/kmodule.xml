@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+1. kmodule.xml 文件的位置默认在 src/main/resources/MATA-INF 目录下（参考KieModuleModelImpl类）
+2. 可以包含一个或多个kbase节点，分别对应drl的规则文件。kbase需要一个全局唯一的name。
+3. packages为drl文件所在的resource目录下的路径（注意区分drl文件中的package与此处的packages意义不同），
+   多个包之间用 "," 分隔（默认情况下会扫描resources目录及其子目录下的所有规则文件）
+4. kbase的default属性，表示当前 KieBase 是否是默认的，如果是默认的则不用名称就可以查到，每个kmodule
+   最多只能有一个默认的 KieBase
+5. kbase下面可以有一个或多个ksession，并且其name属性必须指定且唯一。
+-->
+
+<kmodule xmlns="http://www.drools.org/xsd/kmodule">
+    <kbase name="all-rules-kbase" default="true">
+        <ksession name="all-rules-ksession"/>
+    </kbase>
+    <kbase name="test01-rules-kbase" packages="rules.test01">
+        <ksession name="test01-rules-ksession"/>
+        <ksession name="test01-rules-stateless-ksession" type="stateless"/>
+    </kbase>
+    <kbase name="test02-rules-kbase" packages="rules.test02">
+    	<ksession name="test02-rules-ksession"/>
+    </kbase>
+    <kbase name="test03-rules-kbase" packages="rules.test03">
+    	<ksession name="test03-rules-ksession"/>
+    </kbase>
+    <kbase name="test04-rules-kbase" packages="rules.test04">
+    	<ksession name="test04-rules-ksession"/>
+    </kbase>
+</kmodule>

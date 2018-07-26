@@ -1,0 +1,57 @@
+//created on: 2018-7-18
+package myrules
+import test01.hello.Account
+
+//list any import classes here.
+
+
+
+//declare any global variables here
+
+/*
+ 对象内部的多个约束连接 "&&"(and),"||"(or)和","(and)来实现
+ 如果记性常量的比较，必须通过eval(条件)或者对象引用比较对象属性，不能单独引用
+ 12个类型比较操作符 >|<,>=|<=,==|!=,contains|not contains,memberOf|not memberOf,matches|not matches
+*/
+rule "rule1#account balance gt 10000"
+agenda-group "test01.hello"
+
+    when
+        //conditions
+        $account: Account( balance > 10000 )
+    then
+        //actions
+		$account.getUser().setType("VIP");
+		System.out.println("rule#account balance gt 10000: current user is " + $account.getUser());
+end
+
+rule "rule1#account balance lte 10000"
+agenda-group "test01.hello"
+   	
+    when
+        //conditions
+       	$account: Account( balance <= 10000 )
+    then
+        //actions
+        $account.getUser().setType("COMMON");
+		System.out.println("rule#account balance lte 10000: current user is " + $account.getUser());
+end
+
+
+
+rule "rule2#account balance gt 10000"
+    when
+       	$account: Account( balance > 10000 )
+    then
+        $account.getUser().setType("VIP");
+		System.out.println("账户余额大于10000: current user is " + $account.getUser());
+end
+rule "rule2#account balance lte 10000"
+    when
+       	$account: Account( balance <= 10000 )
+    then
+        $account.getUser().setType("COMMON");
+		System.out.println("账户余额不大于10000: current user is " + $account.getUser());
+end
+
+

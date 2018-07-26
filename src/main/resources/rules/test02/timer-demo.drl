@@ -1,0 +1,25 @@
+//created on: 2018-7-19
+package rules.test02
+import test02.rules.Server
+import java.util.ArrayList
+
+/**
+* 测试 定时器
+*
+*/
+global ArrayList events
+rule "test02-timer-01"
+	// 含有定时器 timer 的规则最好不要用用 agenda-group 修饰，否则定时器可能不生效
+	// 如果非要使用 agenda-group 修饰，则最好配置 auto-focus=true
+	agenda-group "test02-timer-group"
+	auto-focus true
+	timer (cron:0/1 * * * * ?)
+    when
+        $s: Server( warnCount>3 )
+    then
+		System.out.println("rule#test02-timer-01: Fired, server=" + $s);
+    	String message = "[warn] server has attempted " + $s.getWarnCount() + " times.";
+    	$s.setMessage(message);
+    	events.add(message);
+end
+
